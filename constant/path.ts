@@ -1,0 +1,7 @@
+const LOGIN_PATHNAME = '/signin';
+
+const REGISTER_PATHNAME = '/signup';
+
+const RESET_PASSWORD_PATHNAME = '/reset-password';
+
+export { LOGIN_PATHNAME, REGISTER_PATHNAME, RESET_PASSWORD_PATHNAME };

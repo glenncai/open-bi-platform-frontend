@@ -1,13 +1,48 @@
-export const metadata = {
-  title: 'Sign In - Mosaic',
-  description: 'Page description',
-};
+'use client';
 
+import React, { useState } from 'react';
 import Link from 'next/link';
-import AuthHeader from '../auth-header';
-import AuthImage from '../auth-image';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+
+import { useRequest } from 'ahooks';
+import { setToken } from '@/utils';
+import { LoginFormProps, loginService } from '@/services/auth';
+
+import AuthHeader from '@/app/(auth)/auth-header';
+import AuthImage from '@/app/(auth)/auth-image';
+import AuthError from '@/app/(auth)/auth-error';
+import LoadingButton from '@/components/loading-button';
 
 export default function SignIn() {
+  const [customError, setCustomError] = useState('');
+
+  const formik = useFormik<LoginFormProps>({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      username: Yup.string().required('Username is required'),
+      password: Yup.string().required('Password is required'),
+    }),
+    onSubmit: async values => {
+      runLogin(values);
+    },
+  });
+
+  const { run: runLogin, loading } = useRequest((values: LoginFormProps) => loginService(values), {
+    manual: true,
+    onError: error => {
+      setCustomError(error.message);
+    },
+    onSuccess: result => {
+      const token = result.data;
+      setToken(token);
+      window.location.replace('/');
+    },
+  });
+
   return (
     <main className="bg-white dark:bg-slate-900">
       <div className="relative md:flex">
@@ -21,13 +56,24 @@ export default function SignIn() {
                 Welcome back! ✨
               </h1>
               {/* Form */}
-              <form>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="space-y-4">
                   <div>
                     <label className="mb-1 block text-sm font-medium" htmlFor="username">
                       Username
                     </label>
-                    <input id="username" className="form-input w-full" type="text" />
+                    <input
+                      id="username"
+                      className="form-input w-full"
+                      type="text"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.username}
+                    />
+                    {customError ? <AuthError message={customError} /> : null}
+                    {formik.touched.username && formik.errors.username ? (
+                      <AuthError message={formik.errors.username} />
+                    ) : null}
                   </div>
                   <div>
                     <label className="mb-1 block text-sm font-medium" htmlFor="password">
@@ -38,7 +84,13 @@ export default function SignIn() {
                       className="form-input w-full"
                       type="password"
                       autoComplete="on"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.password}
                     />
+                    {formik.touched.password && formik.errors.password ? (
+                      <AuthError message={formik.errors.password} />
+                    ) : null}
                   </div>
                 </div>
                 <div className="mt-6 flex items-center justify-between">
@@ -47,9 +99,16 @@ export default function SignIn() {
                       Forgot Password?
                     </Link>
                   </div>
-                  <Link className="btn ml-3 bg-indigo-500 text-white hover:bg-indigo-600" href="/">
-                    Sign In
-                  </Link>
+                  {loading ? (
+                    <LoadingButton text="Sign In" />
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn ml-3 bg-indigo-500 text-white hover:bg-indigo-600"
+                    >
+                      Sign In
+                    </button>
+                  )}
                 </div>
               </form>
               {/* Footer */}

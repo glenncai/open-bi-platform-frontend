@@ -1,15 +1,13 @@
 export const metadata = {
   title: 'Dashboard - Open BI Platform',
-  description: 'Dashboard for showing the AI analytics summary.',
+  description: 'Dashboard for showing all analytics summary.',
 };
 
-import WelcomeBanner from './welcome-banner';
 import DashboardCard from './dashboard-card';
 
 export default function Dashboard() {
   return (
     <div className="mx-auto w-full max-w-[96rem] px-4 py-8 sm:px-6 lg:px-8">
-      <WelcomeBanner />
       {/* Cards */}
       <div className="grid grid-cols-12 gap-6">
         <DashboardCard />

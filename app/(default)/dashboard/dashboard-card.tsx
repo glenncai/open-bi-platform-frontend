@@ -57,7 +57,12 @@ export default function DashboardCard() {
         {/* Delete button */}
         <EditMenu />
       </header>
-      <ReactECharts option={option} style={{ height: 400 }} opts={{ renderer: 'svg' }} />
+      <ReactECharts
+        option={option}
+        style={{ height: 400 }}
+        lazyUpdate={true}
+        opts={{ renderer: 'svg' }}
+      />
       <AccordionBasic title="Goal Analysis">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
         labore et dolore magna aliqua. Ut enim ad minim veniam quis. Ut enim ad minim veniam quis.

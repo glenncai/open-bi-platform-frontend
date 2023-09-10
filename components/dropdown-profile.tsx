@@ -3,15 +3,24 @@
 import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
 import Avatar from '@/components/avatar';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
+import { removeToken } from '@/utils';
 
 export default function DropdownProfile({ align }: { align?: 'left' | 'right' }) {
+  const { username, role } = useGetUserInfo();
+
+  function handleLogout() {
+    removeToken();
+    window.location.reload();
+  }
+
   return (
     <Menu as="div" className="relative inline-flex">
       <Menu.Button className="group inline-flex items-center justify-center">
         <Avatar />
         <div className="flex items-center truncate">
           <span className="ml-2 truncate text-sm font-medium group-hover:text-slate-800 dark:text-slate-300 dark:group-hover:text-slate-200">
-            Acme Inc.
+            {username}
           </span>
           <svg className="ml-1 h-3 w-3 shrink-0 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
@@ -30,8 +39,8 @@ export default function DropdownProfile({ align }: { align?: 'left' | 'right' })
         leaveTo="opacity-0"
       >
         <div className="mb-1 border-b border-slate-200 px-3 pb-2 pt-0.5 dark:border-slate-700">
-          <div className="font-medium text-slate-800 dark:text-slate-100">Acme Inc.</div>
-          <div className="text-xs italic text-slate-500 dark:text-slate-400">Administrator</div>
+          <div className="font-medium text-slate-800 dark:text-slate-100">{username}</div>
+          <div className="text-xs italic text-slate-500 dark:text-slate-400">{role}</div>
         </div>
         <Menu.Items as="ul" className="focus:outline-none">
           <Menu.Item as="li">
@@ -40,7 +49,7 @@ export default function DropdownProfile({ align }: { align?: 'left' | 'right' })
                 className={`flex items-center px-3 py-1 text-sm font-medium ${
                   active ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-500'
                 }`}
-                href="#0"
+                href="/settings/account"
               >
                 Settings
               </Link>
@@ -48,14 +57,14 @@ export default function DropdownProfile({ align }: { align?: 'left' | 'right' })
           </Menu.Item>
           <Menu.Item as="li">
             {({ active }) => (
-              <Link
+              <button
                 className={`flex items-center px-3 py-1 text-sm font-medium ${
                   active ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-500'
                 }`}
-                href="#0"
+                onClick={handleLogout}
               >
                 Sign Out
-              </Link>
+              </button>
             )}
           </Menu.Item>
         </Menu.Items>

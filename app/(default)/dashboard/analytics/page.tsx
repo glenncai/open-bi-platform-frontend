@@ -35,12 +35,11 @@ export default function Analytics() {
           <label className="mb-1 block text-sm font-medium" htmlFor="chartName">
             Chart Name
           </label>
-          <textarea
+          <input
             id="chartName"
             className="form-textarea w-full px-2 py-1"
-            rows={4}
-            required
-          ></textarea>
+            style={{ height: '38px' }}
+          ></input>
         </div>
         <div className="mb-3 w-full">
           <label className="mb-1 block text-sm font-medium" htmlFor="chartType">
@@ -54,7 +53,10 @@ export default function Analytics() {
           </label>
           <input id="fileInput" type="file" className="hidden" />
           <div className="w-full">
-            <button className="btn w-full border-slate-200 bg-white text-indigo-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600">
+            <button
+              className="btn w-full border-slate-200 bg-white text-indigo-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
+              style={{ height: '38px' }}
+            >
               <svg className="h-4 w-4 shrink-0 fill-current opacity-50" viewBox="0 0 16 16">
                 <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
               </svg>
